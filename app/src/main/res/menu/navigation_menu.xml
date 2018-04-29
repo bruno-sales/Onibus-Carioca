@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nearby_buses" android:icon="@mipmap/ic_directions_bus_black_24dp" android:title="Ônibus próximos"/>
+    <item android:id="@+id/local_lines" android:icon="@mipmap/ic_person_pin_circle_black_24dp" android:title="Linhas deste local"/>
+    <item android:id="@+id/config" android:icon="@mipmap/ic_settings_black_24dp" android:title="Configurações avançadas"/>
+    <item android:id="@+id/infos" android:icon="@mipmap/ic_info_black_24dp" android:title="Sobre"/>
+
+</menu>
