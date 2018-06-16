@@ -28,7 +28,7 @@
                 android:id="@+id/txtInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Aplicação desenvolvida utilizando a Ikuzo API como motor de GPS dos ônibus.\n\nA atualização dos dados é feita a cada 3 minutos. " />
+                android:text="Aplicação desenvolvida utilizando a Ikuzo API como motor de GPS dos ônibus.\n\nA atualização dos dados de GPS é feita a cada 1 minuto. " />
 
             <TextView
                 android:id="@+id/textView7"

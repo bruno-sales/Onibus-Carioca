@@ -10,7 +10,7 @@ public class SharedPreferencesHelper {
     private Context context;
 
     private static final String PREFERENCES_FILE = "preferences";
-    private static final String DEFAULT_REPOSITORY_URL = "http://10.0.2.2:57408/v1/api/";
+    private static final String DEFAULT_REPOSITORY_URL = "http://40.117.209.108/v1/api/";
     private static final int DEFAULT_VARIANCE = 100;
 
     public SharedPreferencesHelper(Context con) {

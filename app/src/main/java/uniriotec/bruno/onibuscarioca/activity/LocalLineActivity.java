@@ -30,11 +30,19 @@ import java.util.ArrayList;
 
 import uniriotec.bruno.onibuscarioca.R;
 import uniriotec.bruno.onibuscarioca.controller.Controller;
+import uniriotec.bruno.onibuscarioca.helper.PermissionHelper;
 import uniriotec.bruno.onibuscarioca.model.LineIndex;
 import uniriotec.bruno.onibuscarioca.model.LocationInformation;
 import uniriotec.bruno.onibuscarioca.model.User;
 
 public class LocalLineActivity extends AppCompatActivity {
+
+    private String[] permissionsNeeded = new String[]{
+            android.Manifest.permission.INTERNET,
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_NETWORK_STATE
+    };
 
     private DrawerLayout myDrawer;
     private ActionBarDrawerToggle myToggle;
@@ -49,6 +57,7 @@ public class LocalLineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.localline_act);
+        PermissionHelper.validatePermissions(1,this,permissionsNeeded);
 
 
         myDrawer = findViewById(R.id.drawerLayout);

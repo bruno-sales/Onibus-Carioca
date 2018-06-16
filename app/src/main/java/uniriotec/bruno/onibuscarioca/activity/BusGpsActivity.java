@@ -29,10 +29,18 @@ import java.util.ArrayList;
 
 import uniriotec.bruno.onibuscarioca.R;
 import uniriotec.bruno.onibuscarioca.controller.Controller;
+import uniriotec.bruno.onibuscarioca.helper.PermissionHelper;
 import uniriotec.bruno.onibuscarioca.model.BusNearby;
 import uniriotec.bruno.onibuscarioca.model.LocationInformation;
 
 public class BusGpsActivity extends AppCompatActivity {
+
+    private String[] permissionsNeeded = new String[]{
+            android.Manifest.permission.INTERNET,
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_NETWORK_STATE
+    };
 
     private DrawerLayout myDrawer;
     private ActionBarDrawerToggle myToggle;
@@ -49,6 +57,8 @@ public class BusGpsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(uniriotec.bruno.onibuscarioca.R.layout.busgps_act);
+        PermissionHelper.validatePermissions(1,this,permissionsNeeded);
+
 
         myDrawer = findViewById(R.id.drawerLayout);
         myToggle = new ActionBarDrawerToggle(this, myDrawer, R.string.open, R.string.close);
