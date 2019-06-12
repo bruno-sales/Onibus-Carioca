@@ -76,7 +76,7 @@ public class ConfigActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                sp.save("http://10.0.2.2:57408/v1/api/",100);
+                sp.save("http://ikuzo.eastus.cloudapp.azure.com/v1/api/",100);
 
                 txtRepository.setText(sp.RepositoryUrl);
                 seekPrecision.setProgress(sp.Variance);

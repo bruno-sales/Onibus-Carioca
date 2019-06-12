@@ -8,7 +8,7 @@ public class BusDetails {
 
     @SerializedName("Line")
     public String line;
-    @SerializedName("Bus")
+    @SerializedName("Modal")
     public String bus;
     @SerializedName("LastUpdateDate")
     public String lastUpdateDate;

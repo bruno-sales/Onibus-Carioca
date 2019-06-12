@@ -4,14 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class BusNearby {
 
-    @SerializedName("Bus")
+    @SerializedName("Modal")
     public String bus ;
     @SerializedName("Line")
     public String line ;
     @SerializedName("Distance")
     public double distance;
-    @SerializedName("MinutesToArrive")
-    public int minutesToArrive;
     @SerializedName("Gps")
     public Gps gps;
 

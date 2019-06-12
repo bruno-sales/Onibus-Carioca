@@ -7,7 +7,7 @@ import java.util.Date;
 public class BusIndex {
     @SerializedName("Line")
     public String line;
-    @SerializedName("Bus")
+    @SerializedName("Modal")
     public String bus;
     @SerializedName("LastUpdateDate")
     public String lastUpdateDate;

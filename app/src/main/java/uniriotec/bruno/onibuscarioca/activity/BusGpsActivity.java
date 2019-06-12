@@ -109,10 +109,8 @@ public class BusGpsActivity extends AppCompatActivity {
         //Adding Itens
         for (BusNearby bus : buses) {
 
-            String information = "Linha: "+bus.line + " - Ônibus: " + bus.bus + "\n"
-                    +"Distância aproximada: " + bus.distance + " metros\n"
-                    +"Tempo aproximado: " + bus.minutesToArrive + " minutos\n"
-                    +"Posição: " + bus.gps.direction;
+            String information = "Linha: "+bus.line + "\n" + "Ônibus: " + bus.bus + "\n"
+                    +"Distância aproximada: " + bus.distance + " metros\n" ;
 
             items.add(information);
         }

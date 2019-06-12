@@ -22,8 +22,8 @@ public class Networking extends AsyncTask<String, Void, String> {
             URL myUrl = new URL(stringUrl);
 
             OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(4, TimeUnit.SECONDS)
-                    .readTimeout(4, TimeUnit.SECONDS)
+                    .connectTimeout(8, TimeUnit.SECONDS)
+                    .readTimeout(8, TimeUnit.SECONDS)
                     .build();
 
             Request request = new Request.Builder()

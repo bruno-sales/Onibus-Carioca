@@ -17,7 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ import uniriotec.bruno.onibuscarioca.controller.Controller;
 import uniriotec.bruno.onibuscarioca.helper.PermissionHelper;
 import uniriotec.bruno.onibuscarioca.model.LineIndex;
 import uniriotec.bruno.onibuscarioca.model.LocationInformation;
-import uniriotec.bruno.onibuscarioca.model.User;
 
 public class LocalLineActivity extends AppCompatActivity {
 

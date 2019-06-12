@@ -19,7 +19,7 @@ public class IkuzoRepository {
 
     private Context context;
     private String endpoint;
-    private int precision;
+    private int distance;
 
     public IkuzoRepository(Context con)
     {
@@ -27,7 +27,7 @@ public class IkuzoRepository {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(context);
 
         endpoint = sp.RepositoryUrl;
-        precision = sp.Variance;
+        distance = sp.Variance * 5;
     }
 
     public LineDetails GetLineDetails(String lineId) throws ExecutionException, InterruptedException{
@@ -49,7 +49,7 @@ public class IkuzoRepository {
 
     public ArrayList<LineIndex> GetLocalLines(double lat, double lon) throws ExecutionException, InterruptedException {
 
-        String myUrl = endpoint + "lines/local?lat=" + lat + "&lon=" + lon+"&precision="+precision;
+        String myUrl = endpoint + "lines/local?lat=" + lat + "&lon=" + lon+"&distance="+distance;
 
         Networking network = new Networking();
         String result = network.execute(myUrl).get();
@@ -68,7 +68,7 @@ public class IkuzoRepository {
 
     public ArrayList<BusNearby> GetNearbyBuses(double lat, double lon) throws ExecutionException, InterruptedException {
 
-        String myUrl = endpoint + "buses/nearby?lat=" + lat + "&lon=" + lon+"&precision="+precision;
+        String myUrl = endpoint + "modals/nearby?lat=" + lat + "&lon=" + lon+"&distance="+distance;
 
         Networking network = new Networking();
         String result = network.execute(myUrl).get();
@@ -87,7 +87,7 @@ public class IkuzoRepository {
 
     public ArrayList<BusNearby> GetNearbyBuses(double lat, double lon, String line) throws ExecutionException, InterruptedException {
 
-        String myUrl = endpoint + "buses/nearby?lat=" + lat + "&lon=" + lon + "&line=" + line+"&precision="+precision;
+        String myUrl = endpoint + "modals/nearby?lat=" + lat + "&lon=" + lon + "&line=" + line+"&distance="+distance;
 
         Networking network = new Networking();
         String result = network.execute(myUrl).get();
