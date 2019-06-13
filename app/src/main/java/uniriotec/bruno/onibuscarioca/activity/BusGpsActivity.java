@@ -10,9 +10,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ public class BusGpsActivity extends AppCompatActivity {
     private DrawerLayout myDrawer;
     private ActionBarDrawerToggle myToggle;
     private Toolbar myToolbar;
+    private SwipeRefreshLayout swipeRefresh;
 
     private Controller controller = new Controller();
     private LocationInformation location;
@@ -59,7 +62,6 @@ public class BusGpsActivity extends AppCompatActivity {
         setContentView(uniriotec.bruno.onibuscarioca.R.layout.busgps_act);
         PermissionHelper.validatePermissions(1,this,permissionsNeeded);
 
-
         myDrawer = findViewById(R.id.drawerLayout);
         myToggle = new ActionBarDrawerToggle(this, myDrawer, R.string.open, R.string.close);
         myToolbar = findViewById(R.id.nav_action);
@@ -72,6 +74,29 @@ public class BusGpsActivity extends AppCompatActivity {
         gpsListView = findViewById(R.id.gpsListview);
         btSearch = findViewById(R.id.btSearch);
 
+        loadListView();
+
+        swipeRefresh = findViewById(R.id.pullToRefresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        loadListView();
+                        swipeRefresh.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+
+
+
+        menuNavigation();
+        buttonActions();
+    }
+
+    private void loadListView()
+    {
         ArrayList<String> items = new ArrayList<>();
         ArrayList<BusNearby> buses = new ArrayList<>();
 
@@ -119,8 +144,6 @@ public class BusGpsActivity extends AppCompatActivity {
             items.add("Não foi possível obter as informações de GPS dos ônibus deste local. \nTente novamente");
         }
 
-        menuNavigation();
-        buttonActions();
     }
 
     private void buttonActions()
