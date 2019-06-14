@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,7 +29,10 @@ import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import uniriotec.bruno.onibuscarioca.R;
 import uniriotec.bruno.onibuscarioca.controller.Controller;
@@ -53,6 +58,7 @@ public class BusGpsActivity extends AppCompatActivity {
     private LocationInformation location;
 
     private TextView lineTxt;
+    private TextView localTxt;
     private ListView gpsListView;
     private Button btSearch;
 
@@ -71,6 +77,7 @@ public class BusGpsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         lineTxt = findViewById(R.id.linhaTxt);
+        localTxt = findViewById(R.id.localTxt);
         gpsListView = findViewById(R.id.gpsListview);
         btSearch = findViewById(R.id.btSearch);
 
@@ -103,13 +110,32 @@ public class BusGpsActivity extends AppCompatActivity {
         Bundle extraData = getIntent().getExtras();
         location = getGpsInformation();
 
-        if (location != null && isNetworkAvailable()) {
-            if (extraData != null) {
-                String lineId = extraData.getString("lineId");
-                lineTxt.setText(lineId);
-                buses = controller.GetNearbyBuses(location.latitude, location.longitude, lineId, this.getApplicationContext());
-            } else {
-                buses = controller.GetNearbyBuses(location.latitude, location.longitude, this.getApplicationContext());
+        if(location != null)
+        {
+            Geocoder geocoder;
+            List<Address> addresses = new ArrayList<>();
+            geocoder = new Geocoder(this, Locale.getDefault());
+
+            try {
+                addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if(addresses.isEmpty() == false)
+            {
+                String address = addresses.get(0).getAddressLine(0);
+                localTxt.setText("Local atual: " + address);
+            }
+
+            if (isNetworkAvailable()) {
+                if (extraData != null) {
+                    String lineId = extraData.getString("lineId");
+                    lineTxt.setText(lineId);
+                    buses = controller.GetNearbyBuses(location.latitude, location.longitude, lineId, this.getApplicationContext());
+                } else {
+                    buses = controller.GetNearbyBuses(location.latitude, location.longitude, this.getApplicationContext());
+                }
             }
         }
 
@@ -179,26 +205,24 @@ public class BusGpsActivity extends AppCompatActivity {
         try {
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            if (location == null) {
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
-                    public void onLocationChanged(Location location) {
-                        location.setLongitude(location.getLongitude());
-                        location.setLatitude(location.getLatitude());
-                    }
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    location.setLongitude(location.getLongitude());
+                    location.setLatitude(location.getLatitude());
+                }
 
-                    @Override
-                    public void onStatusChanged(String s, int i, Bundle bundle) {
-                    }
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+                }
 
-                    @Override
-                    public void onProviderEnabled(String s) {
-                    }
+                @Override
+                public void onProviderEnabled(String s) {
+                }
 
-                    @Override
-                    public void onProviderDisabled(String s) {
-                    }
-                });
-            }
+                @Override
+                public void onProviderDisabled(String s) {
+                }
+            });
 
             loc.longitude = location.getLongitude();
             loc.latitude = location.getLatitude();
