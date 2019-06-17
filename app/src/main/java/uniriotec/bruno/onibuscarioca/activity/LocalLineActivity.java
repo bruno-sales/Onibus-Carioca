@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -139,28 +140,33 @@ public class LocalLineActivity extends AppCompatActivity {
         }
 
         try {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            if (location == null) {
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
-                    public void onLocationChanged(Location location) {
-                        location.setLongitude(location.getLongitude());
-                        location.setLatitude(location.getLatitude());
-                    }
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
+            criteria.setCostAllowed(false);
+            String bestProvider =lm.getBestProvider(criteria,true);
 
-                    @Override
-                    public void onStatusChanged(String s, int i, Bundle bundle) {
-                    }
+            lm.requestLocationUpdates(bestProvider, 2000, 10, new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    location.setLongitude(location.getLongitude());
+                    location.setLatitude(location.getLatitude());
+                }
 
-                    @Override
-                    public void onProviderEnabled(String s) {
-                    }
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+                }
 
-                    @Override
-                    public void onProviderDisabled(String s) {
-                    }
-                });
-            }
+                @Override
+                public void onProviderEnabled(String s) {
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+                }
+            });
+
+            Location location = lm.getLastKnownLocation(bestProvider);
 
             loc.longitude = location.getLongitude();
             loc.latitude = location.getLatitude();

@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:gravity="center_horizontal"
-                android:text="Precisão para GPS" />
+                android:text="Alcance do GPS" />
 
             <SeekBar
                 android:id="@+id/sbPrecision"

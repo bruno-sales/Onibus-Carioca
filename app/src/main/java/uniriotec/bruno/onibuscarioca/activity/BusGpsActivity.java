@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -80,10 +82,24 @@ public class BusGpsActivity extends AppCompatActivity {
         localTxt = findViewById(R.id.localTxt);
         gpsListView = findViewById(R.id.gpsListview);
         btSearch = findViewById(R.id.btSearch);
+        swipeRefresh = findViewById(R.id.pullToRefresh);
 
         loadListView();
 
-        swipeRefresh = findViewById(R.id.pullToRefresh);
+        gpsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (gpsListView.getChildAt(0) != null) {
+                    swipeRefresh.setEnabled(gpsListView.getFirstVisiblePosition() == 0 && gpsListView.getChildAt(0).getTop() == 0);
+                }
+            }
+        });
+
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -203,9 +219,14 @@ public class BusGpsActivity extends AppCompatActivity {
         }
 
         try {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
+            criteria.setCostAllowed(false);
+            String bestProvider =lm.getBestProvider(criteria,true);
+
+            lm.requestLocationUpdates(bestProvider, 2000, 10, new LocationListener() {
                 public void onLocationChanged(Location location) {
                     location.setLongitude(location.getLongitude());
                     location.setLatitude(location.getLatitude());
@@ -223,6 +244,8 @@ public class BusGpsActivity extends AppCompatActivity {
                 public void onProviderDisabled(String s) {
                 }
             });
+
+            Location location = lm.getLastKnownLocation(bestProvider);
 
             loc.longitude = location.getLongitude();
             loc.latitude = location.getLatitude();

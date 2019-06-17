@@ -17,6 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/pullToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -69,10 +74,7 @@
                     android:layout_span="3"
                     android:text="Local atual: " />
             </TableRow>
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/pullToRefresh"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -83,10 +85,10 @@
                             android:layout_span="3"
                             android:paddingBottom="10dp" />
                 </TableRow>
-            </android.support.v4.widget.SwipeRefreshLayout>
-
 
         </TableLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
