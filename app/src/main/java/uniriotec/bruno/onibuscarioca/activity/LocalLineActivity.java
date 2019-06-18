@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -26,7 +28,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import uniriotec.bruno.onibuscarioca.R;
 import uniriotec.bruno.onibuscarioca.controller.Controller;
@@ -51,14 +56,15 @@ public class LocalLineActivity extends AppCompatActivity {
     private LocationInformation location;
 
     private ListView linesListView;
+    private TextView localTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.localline_act);
-        PermissionHelper.validatePermissions(1,this,permissionsNeeded);
+        PermissionHelper.validatePermissions(1, this, permissionsNeeded);
 
-
+        localTxt = findViewById(R.id.localTxt);
         myDrawer = findViewById(R.id.drawerLayout);
         myToolbar = findViewById(R.id.nav_action);
         myToggle = new ActionBarDrawerToggle(this, myDrawer, R.string.open, R.string.close);
@@ -72,8 +78,25 @@ public class LocalLineActivity extends AppCompatActivity {
 
         location = getGpsInformation();
 
-        if (location != null && isNetworkAvailable())
-            lines = controller.GetLocalLines(location.latitude, location.longitude, this.getApplicationContext());
+        if (location != null) {
+            Geocoder geocoder;
+            List<Address> addresses = new ArrayList<>();
+            geocoder = new Geocoder(this, Locale.getDefault());
+
+            try {
+                addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addresses.isEmpty() == false) {
+                String address = addresses.get(0).getAddressLine(0);
+                localTxt.setText("Local atual: " + address);
+            }
+
+            if (isNetworkAvailable())
+                lines = controller.GetLocalLines(location.latitude, location.longitude, this.getApplicationContext());
+        }
 
         linesListView = findViewById(R.id.listViewId);
 
@@ -98,7 +121,6 @@ public class LocalLineActivity extends AppCompatActivity {
         for (LineIndex line : lines) {
             items.add(line.line + " - " + line.name);
         }
-
 
         final ArrayList<LineIndex> finalLines = lines;
 

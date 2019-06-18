@@ -172,12 +172,31 @@ public class BusGpsActivity extends AppCompatActivity {
 
         gpsListView.setAdapter(itemsAdaptor);
 
+        Geocoder busGeocoder;
+        List<Address> busAddresses;
 
         //Adding Itens
         for (BusNearby bus : buses) {
 
-            String information = "Linha: "+bus.line + "\n" + "Ônibus: " + bus.bus + "\n"
-                    +"Distância aproximada: " + bus.distance + " metros\n" ;
+            String busStringAddress = "";
+
+            busAddresses = new ArrayList<>();
+            busGeocoder = new Geocoder(this, Locale.getDefault());
+
+            try {
+                busAddresses = busGeocoder.getFromLocation(bus.gps.latitude, bus.gps.longitude, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if(busAddresses.isEmpty() == false)
+            {
+                busStringAddress = busAddresses.get(0).getThoroughfare() + ", " + busAddresses.get(0).getSubThoroughfare() + " - " + busAddresses.get(0).getSubLocality();
+            }
+
+            String information = "Linha: "+bus.line + "\n" + "Ônibus: " + bus.bus + "\n" +
+                    busStringAddress +"\n" +
+                    "Distância aproximada: " + bus.distance + " metros\n" ;
 
             items.add(information);
         }
